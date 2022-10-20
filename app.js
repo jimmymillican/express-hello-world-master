@@ -77,7 +77,7 @@ axios('https://charge.pod-point.com/address/tesco-extra-prescot-1j65m')
 
 
 app.get("/", (req, res) => res.type('html').send(html));
-app.get("/", (req, res) => res.type('html').send(htmlExtra)); 
+app.get("/", (req, res) => res.type('html').send('./.'+ htmlExtra)); 
 app.get("/", (req, res) => res.type('html').send(html2));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
@@ -126,11 +126,11 @@ const html = `
       }
     </style>
   </head>
-  <body>
+  <body><section>
+  Hello from Render2!
   `
   const html2 = `
-<section>
-Hello from Render!
+
 </section>
 </body>
 </html>
