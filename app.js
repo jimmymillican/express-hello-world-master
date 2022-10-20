@@ -5,8 +5,6 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 
-const app = express()
-
 axios('https://charge.pod-point.com/address/tesco-extra-prescot-1j65m')
     .then( response => {
         const html = response.data
