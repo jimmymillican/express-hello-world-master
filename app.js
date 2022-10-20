@@ -3,7 +3,7 @@ const cheerio = require('cheerio')
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
-
+const htmlExtra = ""
 
 axios('https://charge.pod-point.com/address/tesco-extra-prescot-1j65m')
     .then( response => {
@@ -50,13 +50,17 @@ axios('https://charge.pod-point.com/address/tesco-extra-prescot-1j65m')
               //if (words[i].includes('Connector'))
              // {
               if (ChargerArray[i] == 'Connector'){
+
+                htmlExtra += '/n Pod :  ' + ChargerName + ' Connector :  ' + ChargerArray[i + 1]  + ' Status : ' + ChargerArray[i + 2] 
                 console.log(' Pod :  ' + ChargerName ) 
                 console.log(' Connector :  ' + ChargerArray[i + 1] ) 
                 console.log(' Status : ' + ChargerArray[i + 2] ) 
                 if (ChargerArray[i + 3] == 'Type'){
                   console.log(' Type :  ' + ChargerArray[i + 3] + ChargerArray[i + 4] ) 
+                  htmlExtra += ' Type :  ' + ChargerArray[i + 3] + ChargerArray[i + 4]
                 } else{
                   console.log(' Type :  ' + ChargerArray[i + 3] ) 
+                  htmlExtra += ' Type :  ' + ChargerArray[i + 3] 
                 }
                 
               
@@ -73,6 +77,8 @@ axios('https://charge.pod-point.com/address/tesco-extra-prescot-1j65m')
 
 
 app.get("/", (req, res) => res.type('html').send(html));
+app.get("/", (req, res) => res.type('html').send(html2));
+app.get("/", (req, res) => res.type('html').send(html3));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
@@ -121,9 +127,15 @@ const html = `
     </style>
   </head>
   <body>
-    <section>
-      Hello from Render!
-    </section>
-  </body>
+`
+
+const html2 = htmlExtra
+
+
+const html3 = `
+<section>
+Hello from Render!
+</section>
+</body>
 </html>
 `
