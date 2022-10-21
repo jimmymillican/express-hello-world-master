@@ -5,79 +5,66 @@ const app = express();
 const port = process.env.PORT || 3001;
 var htmlExtra = ""
 
-axios('https://charge.pod-point.com/address/tesco-extra-prescot-1j65m')
+ axios('https://charge.pod-point.com/address/tesco-extra-prescot-1j65m')
     .then( response => {
         const html = response.data
         const $ = cheerio.load(html)
         const chargers = []
 
 
-        $('.list-group-item', html).each(function(){
+          $('.list-group-item', html).each(function(){
 
-            // const thePodNumber = $(this).find('.door').text()
-            
-            //const thetext = $(this).text()
-     
-           //$('.title')[0].childNodes[0].nodeValue
-            const thetext2 = $(this).text()
- 
-            chargers.fill(thetext2)
-            const ChargerName = $(this).find('h4').text().trim()
-
-            const Details = $(this).find('.details').text()
- 
-          //  console.log('Pod : ' + ChargerName )
-
-            //console.log(' Details ' + Details )
-            const textAttributes = thetext2.split('/n')
- 
-            // Reference to our element
+              const thetext2 = $(this).text()
   
-            var words = Details.split(' ');
-            const ChargerArray = []
+              chargers.fill(thetext2)
+              const ChargerName = $(this).find('h4').text().trim()
 
-            for (var i = 0; i < words.length; i++) {
-                //if (words[i].includes('Connector'))
-               // {
-                if (words[i] !== '' && words[i] !== '\n' && words[i]  ){
-                  
-                  ChargerArray.push(words[i])
-                  
-                }
-            }
+              const Details = $(this).find('.details').text()
+  
+              // console.log('Pod : ' + ChargerName ) 
+              // console.log(' Details ' + Details )
+              const textAttributes = thetext2.split('/n')
+  
+              // Reference to our element
+              var words = Details.split(' ');
+              const ChargerArray = []
 
-            for (var i = 0; i < ChargerArray.length; i++) {
-              //if (words[i].includes('Connector'))
-             // {
-              if (ChargerArray[i] == 'Connector'){
-
-                htmlExtra += '/n Pod :  ' + ChargerName + ' Connector :  ' + ChargerArray[i + 1]  + ' Status : ' + ChargerArray[i + 2] 
-                console.log(' Pod :  ' + ChargerName ) 
-                console.log(' Connector :  ' + ChargerArray[i + 1] ) 
-                console.log(' Status : ' + ChargerArray[i + 2] ) 
-                if (ChargerArray[i + 3] == 'Type'){
-                  console.log(' Type :  ' + ChargerArray[i + 3] + ChargerArray[i + 4] ) 
-                  htmlExtra += ' Type :  ' + ChargerArray[i + 3] + ChargerArray[i + 4]
-                } else{
-                  console.log(' Type :  ' + ChargerArray[i + 3] ) 
-                  htmlExtra += ' Type :  ' + ChargerArray[i + 3] 
-                }
-                
-              
-
+              for (var i = 0; i < words.length; i++) {
+                  if (words[i] !== '' && words[i] !== '\n' && words[i]  ){ 
+                    ChargerArray.push(words[i]) 
+                  }
               }
-          
-          }
 
-         
-             }        
-         )
+              for (var i = 0; i < ChargerArray.length; i++) {
+                if (ChargerArray[i] == 'Connector'){
+
+                  htmlExtra += '/n Pod :  ' + ChargerName + ' Connector :  ' + ChargerArray[i + 1]  + ' Status : ' + ChargerArray[i + 2] 
+                  console.log(' Pod :  ' + ChargerName ) 
+                  console.log(' Connector :  ' + ChargerArray[i + 1] ) 
+                  console.log(' Status : ' + ChargerArray[i + 2] ) 
+                  if (ChargerArray[i + 3] == 'Type'){
+                    console.log(' Type :  ' + ChargerArray[i + 3] + ChargerArray[i + 4] ) 
+                    htmlExtra += ' Type :  ' + ChargerArray[i + 3] + ChargerArray[i + 4]
+                  } else{
+                    console.log(' Type :  ' + ChargerArray[i + 3] ) 
+                    htmlExtra += ' Type :  ' + ChargerArray[i + 3] 
+                  } 
+                } 
+          } 
+        }        
+      )
   
-     }).catch(err => console.log(err))
+    }).catch(err => console.log(err))
 
+    await sleep(10000)
+    function sleep(ms) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+      });
+    }
 
 app.get("/", (req, res) => res.type('html').send(html));
-app.get("/", (req, res) => res.type('html').send('./.'+ htmlExtra)); 
+app.get("/", (req, res) => res.type('html').send('<h2>' + htmlExtra + '</h2>')); 
 app.get("/", (req, res) => res.type('html').send(html2));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
