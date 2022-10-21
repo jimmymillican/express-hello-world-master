@@ -56,12 +56,23 @@ var htmlExtra = ""
   
     }).catch(err => console.log(err))
 
-    await sleep(10000)
     function sleep(ms) {
       return new Promise((resolve) => {
         setTimeout(resolve, ms);
       });
     }
+
+    // Call start
+(async() => {
+  console.log('before start');
+
+  await sleep(10000)
+  
+  console.log('after start');
+})();
+
+   
+    
 
 app.get("/", (req, res) => res.type('html').send(html));
 app.get("/", (req, res) => res.type('html').send('<h2>' + htmlExtra + '</h2>')); 
